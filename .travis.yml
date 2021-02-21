@@ -3,4 +3,4 @@ jdk:
    - openjdk8
    - openjdk11
 scala:
-   - 3.0.0-M3
+   - 3.0.0-RC1
