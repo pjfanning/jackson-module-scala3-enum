@@ -6,7 +6,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
   .settings(
     name := "jackson-module-scala3-enum",
     organization := "com.github.pjfanning",
-    scalaVersion := "3.0.0-RC1",
+    scalaVersion := "3.0.0-RC2",
 
     sbtPlugin := false,
 
@@ -39,7 +39,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
 
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.2",
-      "org.scalatest" %% "scalatest" % "3.2.5" % Test
+      "org.scalatest" %% "scalatest" % "3.2.7" % Test
     ),
 
     // enable publishing the main API jar
