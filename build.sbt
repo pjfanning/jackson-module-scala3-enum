@@ -6,7 +6,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
   .settings(
     name := "jackson-module-scala3-enum",
     organization := "com.github.pjfanning",
-    scalaVersion := "3.0.0",
+    scalaVersion := "3.0.1",
 
     sbtPlugin := false,
 
@@ -36,7 +36,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
     ),
 
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.3",
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.4",
       "org.scalatest" %% "scalatest" % "3.2.9" % Test
     ),
 
