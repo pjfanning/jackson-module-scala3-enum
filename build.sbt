@@ -1,12 +1,11 @@
 import sbt._
 import Keys._
-import sbtrelease.ReleasePlugin._
 
 lazy val jacksonModuleScala3Enum = (project in file("."))
   .settings(
     name := "jackson-module-scala3-enum",
     organization := "com.github.pjfanning",
-    scalaVersion := "3.0.2",
+    ThisBuild / scalaVersion := "3.0.2",
 
     sbtPlugin := false,
 
@@ -49,6 +48,27 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
       val contents = "version=%s\ngroupId=%s\nartifactId=%s\n".format(version.value, organization.value, name.value)
       IO.write(file, contents)
       Seq(file)
-    }.taskValue
+    }.taskValue,
+
+    ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8"),
+    ThisBuild / githubWorkflowTargetTags ++= Seq("v*"),
+    ThisBuild / githubWorkflowPublishTargetBranches := Seq(
+      RefPredicate.Equals(Ref.Branch("main")),
+      RefPredicate.StartsWith(Ref.Tag("v"))
+    ),
+
+    ThisBuild / githubWorkflowPublish := Seq(
+      WorkflowStep.Sbt(
+        List("ci-release"),
+        env = Map(
+          "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+          "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+          "SONATYPE_PASSWORD" -> "${{ secrets.CI_DEPLOY_PASSWORD }}",
+          "SONATYPE_USERNAME" -> "${{ secrets.CI_DEPLOY_USERNAME }}",
+          "CI_SNAPSHOT_RELEASE" -> "+publishSigned"
+        )
+      )
+    )
+
   )
 
