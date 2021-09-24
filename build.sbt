@@ -14,13 +14,6 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
     homepage := Some(new java.net.URL("https://github.com/pjfanning/jackson-module-scala3-enum/")),
     description := "A library for serializing/deserializing scala3 enums using Jackson.",
 
-    publishTo := Some(
-      if (isSnapshot.value)
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    ),
-
     licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
 
     scmInfo := Some(
