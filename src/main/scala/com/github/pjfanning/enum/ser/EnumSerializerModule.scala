@@ -10,7 +10,7 @@ import scala.reflect.Enum
 
 private object EnumSerializer extends JsonSerializer[Enum] {
   def serialize(value: Enum, jgen: JsonGenerator, provider: SerializerProvider): Unit =
-    jgen.writeString(value.toString)
+    provider.defaultSerializeValue(value.toString, jgen)
 }
 
 private object EnumSerializerResolver extends Serializers.Base {
