@@ -26,5 +26,10 @@ class EnumDeserializerSpec extends AnyWordSpec with Matchers {
       val red = s"""{"make":"Perodua","color":"${ColorEnum.Green}"}"""
       mapper.readValue(red, classOf[Car]) shouldEqual Car("Perodua", ColorEnum.Green)
     }
+    "deserialize CtxCar with Ctx.ColorEnum" in {
+      val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
+      val red = s"""{"make":"Perodua","color":"${Ctx.ColorEnum.Green}"}"""
+      mapper.readValue(red, classOf[CtxCar]) shouldEqual CtxCar("Perodua", Ctx.ColorEnum.Green)
+    }
   }
 }

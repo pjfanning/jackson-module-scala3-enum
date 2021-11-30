@@ -23,5 +23,9 @@ class EnumSerializerSpec extends AnyWordSpec with Matchers {
       val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
       mapper.writeValueAsString(Car("Perodua", ColorEnum.Green)) shouldEqual (s"""{"make":"Perodua","color":"${ColorEnum.Green}"}""")
     }
+    "serialize CtxCar with Ctx.ColorEnum" in {
+      val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
+      mapper.writeValueAsString(CtxCar("Perodua", Ctx.ColorEnum.Green)) shouldEqual (s"""{"make":"Perodua","color":"${Ctx.ColorEnum.Green}"}""")
+    }
   }
 }
