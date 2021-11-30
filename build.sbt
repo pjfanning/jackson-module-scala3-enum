@@ -44,7 +44,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
       Seq(file)
     }.taskValue,
 
-    ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8"),
+    ThisBuild / githubWorkflowJavaVersions := Seq("zulu@1.8"),
     ThisBuild / githubWorkflowTargetTags ++= Seq("v*"),
     ThisBuild / githubWorkflowPublishTargetBranches := Seq(
       RefPredicate.Equals(Ref.Branch("main")),
