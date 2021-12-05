@@ -22,3 +22,5 @@ val mapper = new ObjectMapper()
 mapper.registerModule(DefaultScalaModule)
 mapper.registerModule(EnumModule)
 ```
+
+The code uses `toString` on the enum instance to get the serialized value and when deserializing, `valueOf(String)` on the derived companion object is used. It may be possible to use Jackson annotations to modify this behaviour but there have been some issues with how the Scala 3 compiler handles Java annotations (some fixed but some still open).
