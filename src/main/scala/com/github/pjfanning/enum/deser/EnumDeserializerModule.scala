@@ -10,8 +10,12 @@ import scala.languageFeature.postfixOps
 import scala.reflect.Enum
 import scala.util.Try
 
+private object EnumDeserializerShared {
+  val StringClass = classOf[String]
+  val EnumClass = classOf[Enum]
+}
+
 private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeserializer[T](clazz) {
-  private val StringClass = classOf[String]
   private val clazzName = clazz.getName
 
   override def deserialize(p: JsonParser, ctxt: DeserializationContext): T = {
@@ -22,7 +26,7 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
     }
     val text = p.getValueAsString
     val result = objectClassOption.flatMap { objectClass =>
-      Option(objectClass.getMethod("valueOf", StringClass)).map { method =>
+      Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
         method.invoke(None.orNull, text).asInstanceOf[T]
       }
     }
@@ -31,7 +35,6 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
 }
 
 private case class EnumKeyDeserializer[T <: Enum](clazz: Class[T]) extends KeyDeserializer {
-  private val StringClass = classOf[String]
   private val clazzName = clazz.getName
 
   override def deserializeKey(key: String, ctxt: DeserializationContext): AnyRef = {
@@ -41,7 +44,7 @@ private case class EnumKeyDeserializer[T <: Enum](clazz: Class[T]) extends KeyDe
       Some(clazz)
     }
     val result = objectClassOption.flatMap { objectClass =>
-      Option(objectClass.getMethod("valueOf", StringClass)).map { method =>
+      Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
         method.invoke(None.orNull, key).asInstanceOf[T]
       }
     }
@@ -51,19 +54,15 @@ private case class EnumKeyDeserializer[T <: Enum](clazz: Class[T]) extends KeyDe
 }
 
 private object EnumDeserializerResolver extends Deserializers.Base {
-  private val EnumClass = classOf[Enum]
-
   override def findBeanDeserializer(javaType: JavaType, config: DeserializationConfig, beanDesc: BeanDescription): JsonDeserializer[Enum] =
-    if (EnumClass isAssignableFrom javaType.getRawClass)
+    if (EnumDeserializerShared.EnumClass isAssignableFrom javaType.getRawClass)
       EnumDeserializer(javaType.getRawClass.asInstanceOf[Class[Enum]])
     else None.orNull
 }
 
 private object EnumKeyDeserializerResolver extends KeyDeserializers {
-  private val EnumClass = classOf[Enum]
-
   override def findKeyDeserializer(javaType: JavaType, config: DeserializationConfig, beanDesc: BeanDescription): KeyDeserializer =
-    if (EnumClass isAssignableFrom javaType.getRawClass)
+    if (EnumDeserializerShared.EnumClass isAssignableFrom javaType.getRawClass)
       EnumKeyDeserializer(javaType.getRawClass.asInstanceOf[Class[Enum]])
     else None.orNull
 }
