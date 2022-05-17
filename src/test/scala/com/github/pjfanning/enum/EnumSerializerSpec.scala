@@ -1,7 +1,7 @@
 package com.github.pjfanning.`enum`
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import  com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -26,6 +26,10 @@ class EnumSerializerSpec extends AnyWordSpec with Matchers {
     "serialize CtxCar with Ctx.ColorEnum" in {
       val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
       mapper.writeValueAsString(CtxCar("Perodua", Ctx.ColorEnum.Green)) shouldEqual (s"""{"make":"Perodua","color":"${Ctx.ColorEnum.Green}"}""")
+    }
+    "serialize Enum as Map Key" in {
+      val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
+      mapper.writeValueAsString(Map(ColorEnum.Green -> "green")) shouldEqual (s"""{"Green":"green"}""")
     }
   }
 }
