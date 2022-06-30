@@ -19,18 +19,24 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
   private val clazzName = clazz.getName
 
   override def deserialize(p: JsonParser, ctxt: DeserializationContext): T = {
-    val objectClassOption = if(clazzName.endsWith("$")) {
-      Try(Class.forName(clazzName.substring(0, clazzName.length - 1))).toOption
-    } else {
-      Some(clazz)
-    }
-    val text = p.getValueAsString
-    val result = objectClassOption.flatMap { objectClass =>
-      Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
-        method.invoke(None.orNull, text).asInstanceOf[T]
+    val result = Option(p.getValueAsString).flatMap { text =>
+      val objectClassOption = if(clazzName.endsWith("$")) {
+        Try(Class.forName(clazzName.substring(0, clazzName.length - 1))).toOption
+      } else {
+        Some(clazz)
+      }
+      objectClassOption.flatMap { objectClass =>
+        Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
+          method.invoke(None.orNull, text).asInstanceOf[T]
+        }
       }
     }
-    result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for $text"))
+    result.getOrElse {
+      Option(p.getValueAsString) match {
+        case Some(text) => throw new IllegalArgumentException(s"Failed to create Enum instance for $text")
+        case _ => None.orNull.asInstanceOf[T]
+      }
+    }
   }
 }
 
