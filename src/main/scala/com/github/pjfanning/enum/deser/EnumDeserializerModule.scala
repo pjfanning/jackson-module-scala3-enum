@@ -31,12 +31,7 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
         }
       }
     }
-    result.getOrElse {
-      Option(p.getValueAsString) match {
-        case Some(text) => throw new IllegalArgumentException(s"Failed to create Enum instance for $text")
-        case _ => None.orNull.asInstanceOf[T]
-      }
-    }
+    result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for ${p.getValueAsString}"))
   }
 }
 
