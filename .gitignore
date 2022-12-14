@@ -1,2 +1,5 @@
 
-.bsp/sbt.json
+.bsp/
+.idea/
+project/project
+target
