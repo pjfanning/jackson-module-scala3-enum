@@ -1,6 +1,7 @@
 package com.github.pjfanning.`enum`
 
 import com.fasterxml.jackson.core.`type`.TypeReference
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.scalatest.matchers.should.Matchers
@@ -9,25 +10,32 @@ import org.scalatest.wordspec.AnyWordSpec
 class EnumDeserializerSpec extends AnyWordSpec with Matchers {
 
   "EnumModule" should {
+    "not deserialize None" in {
+      val mapper = JsonMapper.builder().addModule(EnumModule).build()
+      val red = s""""$None""""
+      intercept[InvalidDefinitionException] {
+        mapper.readValue(red, classOf[Option[_]])
+      }
+    }
     "deserialize ColorEnum" in {
       val mapper = JsonMapper.builder().addModule(EnumModule).build()
       val red = s""""${ColorEnum.Red}""""
-      mapper.readValue(red, classOf[ColorEnum]) shouldEqual(ColorEnum.Red)
+      mapper.readValue(red, classOf[ColorEnum]) shouldEqual ColorEnum.Red
     }
     "deserialize Colors" in {
       val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
       val colors = Colors(Set(ColorEnum.Red, ColorEnum.Green))
       val json = mapper.writeValueAsString(colors)
-      mapper.readValue(json, classOf[Colors]) shouldEqual(colors)
+      mapper.readValue(json, classOf[Colors]) shouldEqual colors
     }
     "deserialize ColorEnum with non-singleton EnumModule" in {
       val mapper = JsonMapper.builder().addModule(EnumModule).build()
       val red = s""""${ColorEnum.Red}""""
-      mapper.readValue(red, classOf[ColorEnum]) shouldEqual(ColorEnum.Red)
+      mapper.readValue(red, classOf[ColorEnum]) shouldEqual ColorEnum.Red
     }
     "deserialize JavaCompatibleColorEnum" in {
       val mapper = JsonMapper.builder().addModule(EnumModule).build()
-      mapper.writeValueAsString(JavaCompatibleColorEnum.Red) shouldEqual (s""""${JavaCompatibleColorEnum.Red}"""")
+      mapper.writeValueAsString(JavaCompatibleColorEnum.Red) shouldEqual s""""${JavaCompatibleColorEnum.Red}""""
     }
     "deserialize Car with ColorEnum" in {
       val mapper = JsonMapper.builder().addModule(DefaultScalaModule).addModule(EnumModule).build()
