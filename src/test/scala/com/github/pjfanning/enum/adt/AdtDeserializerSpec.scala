@@ -11,7 +11,7 @@ class AdtDeserializerSpec extends AnyWordSpec with Matchers {
     "deserialize Color ADT" in {
       val mapper = JsonMapper.builder().addModule(EnumModule).build()
       val red = s""""${Color.Red}""""
-      mapper.readValue(red, Color.Red.getClass) shouldEqual Color.Red
+      mapper.readValue(red, classOf[Color]) shouldEqual Color.Red
     }
   }
 }
