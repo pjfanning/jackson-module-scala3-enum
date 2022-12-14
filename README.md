@@ -6,7 +6,7 @@
 Jackson support for Scala3 [enums](https://dotty.epfl.ch/docs/reference/enums/enums.html).
 
 ```
-libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala3-enum" % "2.14.0"
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala3-enum" % "2.14.1"
 ```
 
 ```
