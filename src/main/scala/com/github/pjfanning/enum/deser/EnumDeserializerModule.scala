@@ -13,6 +13,12 @@ import scala.util.Try
 private object EnumDeserializerShared {
   val StringClass = classOf[String]
   val EnumClass = classOf[Enum]
+
+  def tryValueOf(clz: Class[_], key: String): Option[_] = {
+    Try(clz.getMethod("valueOf", EnumDeserializerShared.StringClass)).toOption.map { method =>
+      method.invoke(None.orNull, key)
+    }
+  }
 }
 
 private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeserializer[T](clazz) {
@@ -26,10 +32,8 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
         Some(clazz)
       }
       objectClassOption.flatMap { objectClass =>
-        Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
-          method.invoke(None.orNull, text).asInstanceOf[T]
-        }
-      }
+        EnumDeserializerShared.tryValueOf(objectClass, text)
+      }.asInstanceOf[Option[T]]
     }
     result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for ${p.getValueAsString}"))
   }
@@ -45,9 +49,7 @@ private case class EnumKeyDeserializer[T <: Enum](clazz: Class[T]) extends KeyDe
       Some(clazz)
     }
     val result = objectClassOption.flatMap { objectClass =>
-      Option(objectClass.getMethod("valueOf", EnumDeserializerShared.StringClass)).map { method =>
-        method.invoke(None.orNull, key).asInstanceOf[T]
-      }
+      EnumDeserializerShared.tryValueOf(objectClass, key)
     }
     val enumResult = result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for $key"))
     enumResult.asInstanceOf[AnyRef]
