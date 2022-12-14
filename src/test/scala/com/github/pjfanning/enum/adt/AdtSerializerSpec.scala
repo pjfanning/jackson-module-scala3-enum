@@ -25,4 +25,3 @@ class AdtSerializerSpec extends AnyWordSpec with Matchers {
     }
   }
 }
-
