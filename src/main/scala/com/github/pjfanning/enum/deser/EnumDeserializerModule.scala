@@ -68,8 +68,10 @@ private case class EnumDeserializer[T <: Enum](clazz: Class[T]) extends StdDeser
         Some(clazz)
       }
       objectClassOption.flatMap { objectClass =>
-        EnumDeserializerShared.tryValueOf(objectClass, text)
-          .orElse(EnumDeserializerShared.matchBasedOnOrdinal(objectClass, text))
+        Try {
+          EnumDeserializerShared.tryValueOf(objectClass, text)
+            .orElse(EnumDeserializerShared.matchBasedOnOrdinal(objectClass, text))
+        }.toOption.flatten
       }.asInstanceOf[Option[T]]
     }
     result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for ${p.getValueAsString}"))
@@ -86,8 +88,10 @@ private case class EnumKeyDeserializer[T <: Enum](clazz: Class[T]) extends KeyDe
       Some(clazz)
     }
     val result = objectClassOption.flatMap { objectClass =>
-      EnumDeserializerShared.tryValueOf(objectClass, key)
-        .orElse(EnumDeserializerShared.matchBasedOnOrdinal(objectClass, key))
+      Try {
+        EnumDeserializerShared.tryValueOf(objectClass, key)
+          .orElse(EnumDeserializerShared.matchBasedOnOrdinal(objectClass, key))
+      }.toOption.flatten
     }
     val enumResult = result.getOrElse(throw new IllegalArgumentException(s"Failed to create Enum instance for $key"))
     enumResult.asInstanceOf[AnyRef]
