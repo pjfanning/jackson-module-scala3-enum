@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.*
 import com.github.pjfanning.`enum`.JacksonModule
 
+import java.lang.reflect.InvocationTargetException
 import scala.languageFeature.postfixOps
 import scala.reflect.Enum
 import scala.util.Try
@@ -46,6 +47,16 @@ private object EnumDeserializerShared {
               case _: NoSuchElementException => {
                 matched = None
                 complete = true
+              }
+              case itex: InvocationTargetException => {
+                Option(itex.getCause) match {
+                  case Some(e) if e.isInstanceOf[NoSuchElementException] => {
+                    matched = None
+                    complete = true
+                  }
+                  case Some(e) => throw e
+                  case _ => throw itex 
+                }
               }
             }
             i += 1
