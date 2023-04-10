@@ -124,6 +124,7 @@ private object EnumKeyDeserializerResolver extends KeyDeserializers {
 }
 
 trait EnumDeserializerModule extends JacksonModule {
+  override def getModuleName: String = "EnumDeserializerModule"
   this += { _ addDeserializers EnumDeserializerResolver }
   this += { _ addKeyDeserializers EnumKeyDeserializerResolver }
 }

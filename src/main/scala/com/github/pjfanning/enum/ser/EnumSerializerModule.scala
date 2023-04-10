@@ -38,6 +38,7 @@ private object EnumKeySerializerResolver extends Serializers.Base {
 }
 
 trait EnumSerializerModule extends JacksonModule {
+  override def getModuleName: String = "EnumSerializerModule"
   this += { _ addSerializers EnumSerializerResolver }
   this += { _ addKeySerializers EnumKeySerializerResolver }
 }

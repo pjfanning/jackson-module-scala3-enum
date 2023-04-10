@@ -39,9 +39,9 @@ trait JacksonModule extends Module {
 
   private val initializers = Seq.newBuilder[SetupContext => Unit]
 
-  def getModuleName = "JacksonModule"
+  override def getModuleName = "JacksonModule"
 
-  def version = JacksonModule.version
+  override def version = JacksonModule.version
 
   def setupModule(context: SetupContext): Unit = {
     initializers.result().foreach(_ apply context)
