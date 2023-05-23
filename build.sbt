@@ -6,7 +6,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
   .settings(
     name := "jackson-module-scala3-enum",
     organization := "com.github.pjfanning",
-    ThisBuild / scalaVersion := "3.2.2",
+    ThisBuild / scalaVersion := "3.3.0",
 
     sbtPlugin := false,
 
