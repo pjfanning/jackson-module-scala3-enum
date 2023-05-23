@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.ser.{BeanSerializerModifier, Serializers}
 import com.fasterxml.jackson.databind.Module
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverter._
 import scala.collection.mutable
 
 object JacksonModule {
