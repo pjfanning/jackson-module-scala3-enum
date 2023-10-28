@@ -1,12 +1,12 @@
 import sbt._
 import Keys._
-import org.typelevel.sbt.gha.JavaSpec.Distribution.Zulu
+import sbtghactions.JavaSpec.Distribution.Zulu
 
 lazy val jacksonModuleScala3Enum = (project in file("."))
   .settings(
     name := "jackson-module-scala3-enum",
     organization := "com.github.pjfanning",
-    ThisBuild / scalaVersion := "3.2.2",
+    ThisBuild / scalaVersion := "3.3.1",
 
     sbtPlugin := false,
 
@@ -29,9 +29,9 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
     ),
 
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % "2.15.1",
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.15.1" % Test,
-      "org.scalatest" %% "scalatest" % "3.2.15" % Test
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.15.3",
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.15.3" % Test,
+      "org.scalatest" %% "scalatest" % "3.2.17" % Test
     ),
 
     // enable publishing the main API jar
@@ -46,6 +46,7 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
     }.taskValue,
 
     ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec(Zulu, "8")),
+    ThisBuild / githubWorkflowTargetTags ++= Seq("v*"),
     ThisBuild / githubWorkflowPublishTargetBranches := Seq(
       RefPredicate.Equals(Ref.Branch("main")),
       RefPredicate.StartsWith(Ref.Tag("v"))
