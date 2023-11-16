@@ -29,8 +29,8 @@ lazy val jacksonModuleScala3Enum = (project in file("."))
     ),
 
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % "2.15.3",
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.15.3" % Test,
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.16.0",
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.16.0" % Test,
       "org.scalatest" %% "scalatest" % "3.2.17" % Test
     ),
 
