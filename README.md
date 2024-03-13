@@ -5,8 +5,10 @@
 
 Jackson support for Scala3 [enums](https://dotty.epfl.ch/docs/reference/enums/enums.html).
 
+This was moved into the main jackson-module-scala lib in its 2.17.0 release (https://github.com/FasterXML/jackson-module-scala/issues/501). So there will be no further releases of this separate lib. DefaultScalaModule includes this module.
+
 ```
-libraryDependencies += "com.github.pjfanning" %% "jackson-module-scala3-enum" % "2.14.1"
+libraryDependencies += "com.github.pjfanning" %% "jackson-module-scala3-enum" % "2.16.0"
 ```
 
 ```
